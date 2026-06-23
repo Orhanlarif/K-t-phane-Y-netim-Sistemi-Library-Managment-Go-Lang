@@ -30,3 +30,5 @@ http://localhost:8080
 # templates/: HTML sayfaları
 # static/: CSS ve statik dosyalar
 # main.go: Uygulama başlangıç dosyası
+username: admin
+password: 1234
