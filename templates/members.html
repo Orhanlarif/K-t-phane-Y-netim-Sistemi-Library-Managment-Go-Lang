@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Üyeler - Kütüphane Yönetim Sistemi</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<div class="layout">
+    <aside class="sidebar">
+        <h2>Kütüphane</h2>
+        <a href="/dashboard">Ana Panel</a>
+        <a href="/books">Kitaplar</a>
+        <a href="/members" class="active">Üyeler</a>
+        <a href="/loans">Ödünç İşlemleri</a>
+        <a href="/logout">Çıkış Yap</a>
+    </aside>
+
+    <main class="content">
+        <h1 class="page-title">Üye Yönetimi</h1>
+
+        <div class="card">
+            <h2>Yeni Üye Ekle</h2>
+
+            <form action="/members/add" method="POST" class="form-grid member-form">
+                <div class="form-group">
+                    <label>Ad Soyad</label>
+                    <input type="text" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label>E-posta</label>
+                    <input type="email" name="email">
+                </div>
+
+                <div class="form-group">
+                    <label>Telefon</label>
+                    <input type="text" name="phone">
+                </div>
+
+                <button type="submit">Üye Ekle</button>
+            </form>
+        </div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Ad Soyad</th>
+                    <th>E-posta</th>
+                    <th>Telefon</th>
+                    <th>İşlem</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {{range .}}
+                <tr>
+                    <td>{{.ID}}</td>
+                    <td>{{.Name}}</td>
+                    <td>{{.Email}}</td>
+                    <td>{{.Phone}}</td>
+                    <td>
+                       <a class="btn btn-danger" 
+   href="/members/delete?id={{.ID}}"
+   onclick="return confirm('Bu üyeyi silmek istediğinize emin misiniz?')">
+   Sil
+</a>
+                    </td>
+                </tr>
+                {{else}}
+                <tr>
+                    <td colspan="5">Henüz üye eklenmemiş.</td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </main>
+</div>
+
+</body>
+</html>

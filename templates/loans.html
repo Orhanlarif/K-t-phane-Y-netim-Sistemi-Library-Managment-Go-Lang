@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ödünç İşlemleri</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<div class="layout">
+    <aside class="sidebar">
+        <h2>Kütüphane</h2>
+        <a href="/dashboard">Ana Panel</a>
+        <a href="/books">Kitaplar</a>
+        <a href="/members">Üyeler</a>
+        <a href="/loans" class="active">Ödünç İşlemleri</a>
+        <a href="/logout">Çıkış Yap</a>
+    </aside>
+
+    <main class="content">
+
+        <div class="topbar">
+            <div>
+                <h1>Ödünç İşlemleri</h1>
+                <p>Kitap ödünç verme ve iade alma işlemlerini buradan yönetebilirsiniz.</p>
+            </div>
+        </div>
+
+        {{if .Error}}
+        <div class="alert alert-danger">{{.Error}}</div>
+        {{end}}
+
+        {{if .Success}}
+        <div class="alert alert-success">{{.Success}}</div>
+        {{end}}
+
+        <div class="card card-gradient">
+            <h2>Yeni Ödünç Verme</h2>
+
+            <form action="/loans/add" method="POST" class="form-grid loan-form">
+
+                <div class="form-group">
+                    <label>Kitap</label>
+                    <select name="book_id" required>
+                        {{range .Books}}
+                        <option value="{{.ID}}">
+                            {{.Title}} - Stok: {{.Quantity}}
+                        </option>
+                        {{end}}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Üye</label>
+                    <select name="member_id" required>
+                        {{range .Members}}
+                        <option value="{{.ID}}">
+                            {{.Name}}
+                        </option>
+                        {{end}}
+                    </select>
+                </div>
+
+                <button type="submit">
+                    Ödünç Ver
+                </button>
+            </form>
+        </div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Kitap</th>
+                    <th>Üye</th>
+                    <th>Alış Tarihi</th>
+                    <th>İade Tarihi</th>
+                    <th>Durum</th>
+                    <th>İşlem</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {{range .Loans}}
+                <tr>
+                    <td>{{.ID}}</td>
+                    <td>{{.BookTitle}}</td>
+                    <td>{{.MemberName}}</td>
+                    <td>{{.LoanDate}}</td>
+                    <td>{{.ReturnDate}}</td>
+                    <td>
+                        {{if eq .Status "Ödünç Verildi"}}
+                            <span class="badge badge-warning">Ödünç Verildi</span>
+                        {{else}}
+                            <span class="badge badge-success">İade Edildi</span>
+                        {{end}}
+                    </td>
+                    <td>
+                        {{if eq .Status "Ödünç Verildi"}}
+                        <a class="btn" 
+                           href="/loans/return?id={{.ID}}"
+                           onclick="return confirm('Bu kitabı iade almak istiyor musunuz?')">
+                            İade Al
+                        </a>
+                        {{else}}
+                        -
+                        {{end}}
+                    </td>
+                </tr>
+                {{else}}
+                <tr>
+                    <td colspan="7" class="empty-state">
+                        Henüz ödünç kaydı bulunmuyor.
+                    </td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </main>
+</div>
+
+</body>
+</html>

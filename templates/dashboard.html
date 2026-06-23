@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel - Kütüphane Yönetim Sistemi</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <h2>Kütüphane</h2>
+
+        <a href="/dashboard" class="active">
+            Ana Panel
+        </a>
+
+        <a href="/books">
+            Kitaplar
+        </a>
+
+        <a href="/members">
+            Üyeler
+        </a>
+
+        <a href="/loans">
+            Ödünç İşlemleri
+        </a>
+
+        <a href="/logout">
+            Çıkış Yap
+        </a>
+    </aside>
+
+    <main class="content">
+
+        <div class="topbar">
+            <div>
+                <h1>Kütüphane Yönetim Paneli</h1>
+
+                <p>
+                    Sistem durumu ve son işlemler burada görüntülenmektedir.
+                </p>
+            </div>
+
+            <div>
+                <span class="badge badge-success">
+                    {{.Today}}
+                </span>
+            </div>
+        </div>
+
+        <div class="stats">
+
+            <div class="stat-card">
+                <h3>Toplam Kitap</h3>
+                <strong>{{.BookCount}}</strong>
+            </div>
+
+            <div class="stat-card">
+                <h3>Toplam Üye</h3>
+                <strong>{{.MemberCount}}</strong>
+            </div>
+
+            <div class="stat-card">
+                <h3>Aktif Ödünç</h3>
+                <strong>{{.LoanCount}}</strong>
+            </div>
+
+            <div class="stat-card">
+                <h3>Stokta Olmayan</h3>
+                <strong>{{.OutOfStockCount}}</strong>
+            </div>
+
+        </div>
+
+        <div class="card card-gradient" style="margin-top: 25px;">
+            <h2>Sistem Bilgisi</h2>
+
+            <p style="margin-top: 12px; line-height: 1.8;">
+                Bu proje Go Programlama Dili kullanılarak geliştirilmiş bir
+                Kütüphane Yönetim Sistemidir.
+                Sistemde kullanıcı doğrulama, kitap yönetimi,
+                üye yönetimi ve ödünç işlemleri bulunmaktadır.
+            </p>
+        </div>
+
+        <div class="card">
+            <h2>Son Ödünç İşlemleri</h2>
+
+            <table class="table" style="margin-top: 20px;">
+
+                <thead>
+                    <tr>
+                        <th>Kitap</th>
+                        <th>Üye</th>
+                        <th>Alış Tarihi</th>
+                        <th>İade Tarihi</th>
+                        <th>Durum</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {{range .RecentLoans}}
+                    <tr>
+                        <td>{{.BookTitle}}</td>
+                        <td>{{.MemberName}}</td>
+                        <td>{{.LoanDate}}</td>
+                        <td>{{.ReturnDate}}</td>
+
+                        <td>
+                            {{if eq .Status "Ödünç Verildi"}}
+                                <span class="badge badge-warning">
+                                    Ödünç Verildi
+                                </span>
+                            {{else}}
+                                <span class="badge badge-success">
+                                    İade Edildi
+                                </span>
+                            {{end}}
+                        </td>
+                    </tr>
+
+                    {{else}}
+
+                    <tr>
+                        <td colspan="5" class="empty-state">
+                            Henüz işlem bulunmuyor.
+                        </td>
+                    </tr>
+
+                    {{end}}
+
+                </tbody>
+
+            </table>
+        </div>
+
+    </main>
+</div>
+
+</body>
+</html>
